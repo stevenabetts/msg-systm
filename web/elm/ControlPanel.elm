@@ -307,7 +307,7 @@ itemThirdLine process =
                   placeholder process.iQueue,
                   name "iqueue",
                   autofocus True,
-                  onInput (RequestUpdateInput process)--save value to model
+                  onInput (RequestUpdateInput process)--save value to model, another button to send model info to JS
                 ] []
              ]]
 
