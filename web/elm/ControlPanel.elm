@@ -17,8 +17,10 @@ type alias Model =
         processes : List Process,
         nameInput : String,
         nextID : Int,
-        inputInput: String,
-        retryInput: String
+        inputModel: String,
+        retryModel: String,
+        mpsModel: String,
+        workersModel:String
     }
     
 type alias Process =
@@ -93,8 +95,10 @@ init =
           [],
           nameInput = "",
           nextID = 0,
-          inputInput = "",
-          retryInput = ""
+          inputModel = "",
+          retryModel = "",
+          mpsModel = "",
+          workersModel = ""
       }
   in
     (initialModel, Cmd.none)
@@ -107,23 +111,25 @@ type Msg
   --| Collapse
   --| Delete Int
   --| UpdateNameInput String
-  --| UpdateInputInput String
+  | UpdateInputModel String
   --| UpdateInputQueue Process String
   --| RequestUpdateInput Process String
-  --| UpdateRetryInput String
+  | UpdateRetryModel String
   --| UpdateRetryQueue Process String
   --| Add
+  | UpdateMpsModel String
+  | UpdateWorkersModel String
   | UpdateInputQueue Process
-  | RequestUpdateInput Process String
+  | RequestUpdateInput Process
   
   | UpdateRetryQueue Process
-  | RequestUpdateRetry Process String
+  | RequestUpdateRetry Process
   
   | AddRemoveWorkers Process
-  | RequestUpdateWorkers Process String
+  | RequestUpdateWorkers Process
   
   | ChangeMps Process
-  | RequestChangeMps Process String
+  | RequestChangeMps Process
   
   | Activate Process
   | RequestActivate Process
@@ -143,6 +149,8 @@ update msg model =
           if e.id == id then { e | isSelected = (not e.isSelected) } else e
       in
         ({ model | processes = List.map updateEntry model.processes }, Cmd.none)
+    
+
     {- 
     Delete id ->
       let
@@ -150,14 +158,9 @@ update msg model =
       in
         ({ model | processes = remainingEntries }, Cmd.none)
         
-    UpdateNameInput content ->
+    UpdateNameModel content ->
         ({ model | nameInput = content }, Cmd.none)
         
-    UpdateInputInput content ->
-        ({ model | inputInput = content }, Cmd.none)
-        
-    UpdateRetryInput content ->
-        ({ model | retryInput = content }, Cmd.none)
       
     Add ->
       let
@@ -177,6 +180,18 @@ update msg model =
               nextID = model.nextID + 1
           }, Cmd.none)
           -}
+    UpdateInputModel content ->
+        ({ model | inputModel = content }, Cmd.none)
+        
+    UpdateRetryModel content ->
+        ({ model | retryModel = content }, Cmd.none)
+
+    UpdateMpsModel content ->
+        ({ model | mpsModel = content }, Cmd.none)
+
+    UpdateWorkersModel content ->
+        ({ model | workersModel = content }, Cmd.none)
+    
     Activate process ->
       let
         updateEntry e =
@@ -194,8 +209,8 @@ update msg model =
       in
         ({ model | processes = List.map updateEntry model.processes }, Cmd.none)
     
-    RequestUpdateInput process string ->
-      (model, updateInputRequests {id = process.id, string = string})
+    RequestUpdateInput process ->
+      (model, updateInputRequests {id = process.id, string = model.inputModel})
     
     UpdateRetryQueue process ->
       let
@@ -204,8 +219,8 @@ update msg model =
       in
         ({ model | processes = List.map updateEntry model.processes }, Cmd.none)
     
-    RequestUpdateRetry process string ->
-      (model, updateRetryRequests {id = process.id, string = string})
+    RequestUpdateRetry process ->
+      (model, updateRetryRequests {id = process.id, string = model.retryModel})
     
     AddRemoveWorkers process ->
       let
@@ -214,8 +229,8 @@ update msg model =
       in
         ({ model | processes = List.map updateEntry model.processes }, Cmd.none)
     
-    RequestUpdateWorkers process value ->
-      (model, changeWorkersRequests {id = process.id, value = (toInt value |> Result.toMaybe |> Maybe.withDefault 0)})
+    RequestUpdateWorkers process ->
+      (model, changeWorkersRequests {id = process.id, value = (toInt model.workersModel |> Result.toMaybe |> Maybe.withDefault 0)})
     
     ChangeMps process ->
       let
@@ -224,8 +239,8 @@ update msg model =
       in
         ({ model | processes = List.map updateEntry model.processes }, Cmd.none)
     
-    RequestChangeMps process value ->
-      (model, changeMpsRequests {id = process.id, value = (toInt value |> Result.toMaybe |> Maybe.withDefault 0)})
+    RequestChangeMps process ->
+      (model, changeMpsRequests {id = process.id, value = (toInt model.mpsModel |> Result.toMaybe |> Maybe.withDefault 0)})
     
     SetProcesses dblist ->
       let
@@ -233,8 +248,10 @@ update msg model =
       in
         ({ model |
               nameInput = "",
-              inputInput = "",
-              retryInput = "",
+              inputModel = "",
+              retryModel = "",
+              mpsModel = "",
+              workersModel = "",
               processes = entriesToAdd,
               nextID = (List.length dblist) + 1
           }, Cmd.none)
@@ -245,15 +262,16 @@ view : Model -> Html Msg
 view model =
     div
         [ id "container" ]
-        [ pageHeader,
+        [ pageHeader model,
         --entryForm model,
         entryList model.processes,
         pageFooter
         ]
         
-pageHeader : Html Msg
-pageHeader =
+pageHeader : Model -> Html Msg
+pageHeader model =
     h1 [ ] [ text "Message System Control Panel" ]
+    --h1 [] [text ("MpsModel" ++ (toString model.mpsModel)), text ("WorkersModel" ++ (toString model.workersModel))]
     
 pageFooter : Html Msg
 pageFooter =
@@ -293,9 +311,10 @@ itemSecondLine process =
                   placeholder (toString process.numWorkers),
                   name "numworkers",
                   autofocus True,
-                  onInput (RequestUpdateWorkers process)--Save value to model, another button to send model info to JS
+                  onInput (UpdateWorkersModel)--Save value to model, another button to send model info to JS
                 ] []
-             ]]
+             ],
+             button [ class "select", onClick (RequestUpdateWorkers process) ] [ text "Save" ]]
              
 itemThirdLine : Process -> Html Msg
 itemThirdLine process =
@@ -307,9 +326,10 @@ itemThirdLine process =
                   placeholder process.iQueue,
                   name "iqueue",
                   autofocus True,
-                  onInput (RequestUpdateInput process)--save value to model, another button to send model info to JS
+                  onInput (UpdateInputModel)--save value to model, another button to send model info to JS
                 ] []
-             ]]
+             ],
+             button [ class "select", onClick (RequestUpdateInput process) ] [ text "Save" ]]
 
 itemFourthLine : Process -> Html Msg
 itemFourthLine process =
@@ -321,9 +341,10 @@ itemFourthLine process =
                   placeholder process.rQueue,
                   name "iqueue",
                   autofocus True,
-                  onInput (RequestUpdateRetry process)
+                  onInput (UpdateRetryModel)
                 ] []
-             ]]
+             ],
+             button [ class "select", onClick (RequestUpdateRetry process) ] [ text "Save" ]]
 
 itemFifthLine : Process -> Html Msg
 itemFifthLine process =
@@ -336,9 +357,10 @@ itemFifthLine process =
                   placeholder (toString process.mps),
                   name "iqueue",
                   autofocus True,
-                  onInput (RequestChangeMps process)
+                  onInput (UpdateMpsModel)
                 ] []
-             ]]
+             ],
+             button [ class "select", onClick (RequestChangeMps process) ] [ text "Save" ]]
 
 entryItem : Process -> Html Msg
 entryItem  process =

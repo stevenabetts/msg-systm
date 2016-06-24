@@ -7209,22 +7209,26 @@ var _user$project$ControlPanel$pageFooter = A2(
 					_elm_lang$html$Html$text('Example Link')
 				]))
 		]));
-var _user$project$ControlPanel$pageHeader = A2(
-	_elm_lang$html$Html$h1,
-	_elm_lang$core$Native_List.fromArray(
-		[]),
-	_elm_lang$core$Native_List.fromArray(
-		[
-			_elm_lang$html$Html$text('Message System Control Panel')
-		]));
+var _user$project$ControlPanel$pageHeader = function (model) {
+	return A2(
+		_elm_lang$html$Html$h1,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Message System Control Panel')
+			]));
+};
 var _user$project$ControlPanel$init = function () {
 	var initialModel = {
 		processes: _elm_lang$core$Native_List.fromArray(
 			[]),
 		nameInput: '',
 		nextID: 0,
-		inputInput: '',
-		retryInput: ''
+		inputModel: '',
+		retryModel: '',
+		mpsModel: '',
+		workersModel: ''
 	};
 	return {ctor: '_Tuple2', _0: initialModel, _1: _elm_lang$core$Platform_Cmd$none};
 }();
@@ -7531,6 +7535,38 @@ var _user$project$ControlPanel$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'UpdateInputModel':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{inputModel: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UpdateRetryModel':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{retryModel: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UpdateMpsModel':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{mpsModel: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UpdateWorkersModel':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{workersModel: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'Activate':
 				var _p1 = _p0._0;
 				var updateEntry = function (e) {
@@ -7575,7 +7611,7 @@ var _user$project$ControlPanel$update = F2(
 					ctor: '_Tuple2',
 					_0: model,
 					_1: _user$project$ControlPanel$updateInputRequests(
-						{id: _p0._0.id, string: _p0._1})
+						{id: _p0._0.id, string: model.inputModel})
 				};
 			case 'UpdateRetryQueue':
 				var _p3 = _p0._0;
@@ -7598,7 +7634,7 @@ var _user$project$ControlPanel$update = F2(
 					ctor: '_Tuple2',
 					_0: model,
 					_1: _user$project$ControlPanel$updateRetryRequests(
-						{id: _p0._0.id, string: _p0._1})
+						{id: _p0._0.id, string: model.retryModel})
 				};
 			case 'AddRemoveWorkers':
 				var _p4 = _p0._0;
@@ -7627,7 +7663,7 @@ var _user$project$ControlPanel$update = F2(
 								_elm_lang$core$Maybe$withDefault,
 								0,
 								_elm_lang$core$Result$toMaybe(
-									_elm_lang$core$String$toInt(_p0._1)))
+									_elm_lang$core$String$toInt(model.workersModel)))
 						})
 				};
 			case 'ChangeMps':
@@ -7657,7 +7693,7 @@ var _user$project$ControlPanel$update = F2(
 								_elm_lang$core$Maybe$withDefault,
 								0,
 								_elm_lang$core$Result$toMaybe(
-									_elm_lang$core$String$toInt(_p0._1)))
+									_elm_lang$core$String$toInt(model.mpsModel)))
 						})
 				};
 			default:
@@ -7669,8 +7705,10 @@ var _user$project$ControlPanel$update = F2(
 						model,
 						{
 							nameInput: '',
-							inputInput: '',
-							retryInput: '',
+							inputModel: '',
+							retryModel: '',
+							mpsModel: '',
+							workersModel: '',
 							processes: entriesToAdd,
 							nextID: _elm_lang$core$List$length(_p6) + 1
 						}),
@@ -7718,9 +7756,9 @@ var _user$project$ControlPanel$changeMpsUpdates = _elm_lang$core$Native_Platform
 				});
 		}));
 var _user$project$ControlPanel$convertMpsUpdates = _user$project$ControlPanel$changeMpsUpdates(_user$project$ControlPanel$convertProcess);
-var _user$project$ControlPanel$Model = F5(
-	function (a, b, c, d, e) {
-		return {processes: a, nameInput: b, nextID: c, inputInput: d, retryInput: e};
+var _user$project$ControlPanel$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {processes: a, nameInput: b, nextID: c, inputModel: d, retryModel: e, mpsModel: f, workersModel: g};
 	});
 var _user$project$ControlPanel$Process = F8(
 	function (a, b, c, d, e, f, g, h) {
@@ -7746,62 +7784,37 @@ var _user$project$ControlPanel$subscriptions = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[_user$project$ControlPanel$processListsToSet, _user$project$ControlPanel$processesToActivate]));
 };
-var _user$project$ControlPanel$RequestChangeMps = F2(
-	function (a, b) {
-		return {ctor: 'RequestChangeMps', _0: a, _1: b};
-	});
-var _user$project$ControlPanel$itemFifthLine = function (process) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('nextline')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('workers')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Messages per Second')
-					])),
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('numberfield')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$input,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$type$('number'),
-								_elm_lang$html$Html_Attributes$placeholder(
-								_elm_lang$core$Basics$toString(process.mps)),
-								_elm_lang$html$Html_Attributes$name('iqueue'),
-								_elm_lang$html$Html_Attributes$autofocus(true),
-								_elm_lang$html$Html_Events$onInput(
-								_user$project$ControlPanel$RequestChangeMps(process))
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[]))
-					]))
-			]));
+var _user$project$ControlPanel$RequestChangeMps = function (a) {
+	return {ctor: 'RequestChangeMps', _0: a};
 };
 var _user$project$ControlPanel$ChangeMps = function (a) {
 	return {ctor: 'ChangeMps', _0: a};
 };
 var _user$project$ControlPanel$mpsToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$ChangeMps, _user$project$ControlPanel$convertMpsUpdates);
-var _user$project$ControlPanel$RequestUpdateWorkers = F2(
-	function (a, b) {
-		return {ctor: 'RequestUpdateWorkers', _0: a, _1: b};
-	});
+var _user$project$ControlPanel$RequestUpdateWorkers = function (a) {
+	return {ctor: 'RequestUpdateWorkers', _0: a};
+};
+var _user$project$ControlPanel$AddRemoveWorkers = function (a) {
+	return {ctor: 'AddRemoveWorkers', _0: a};
+};
+var _user$project$ControlPanel$workersToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$AddRemoveWorkers, _user$project$ControlPanel$convertWorkersUpdates);
+var _user$project$ControlPanel$RequestUpdateRetry = function (a) {
+	return {ctor: 'RequestUpdateRetry', _0: a};
+};
+var _user$project$ControlPanel$UpdateRetryQueue = function (a) {
+	return {ctor: 'UpdateRetryQueue', _0: a};
+};
+var _user$project$ControlPanel$retryToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$UpdateRetryQueue, _user$project$ControlPanel$convertRetryUpdates);
+var _user$project$ControlPanel$RequestUpdateInput = function (a) {
+	return {ctor: 'RequestUpdateInput', _0: a};
+};
+var _user$project$ControlPanel$UpdateInputQueue = function (a) {
+	return {ctor: 'UpdateInputQueue', _0: a};
+};
+var _user$project$ControlPanel$inputToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$UpdateInputQueue, _user$project$ControlPanel$convertInputUpdates);
+var _user$project$ControlPanel$UpdateWorkersModel = function (a) {
+	return {ctor: 'UpdateWorkersModel', _0: a};
+};
 var _user$project$ControlPanel$itemSecondLine = function (process) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -7838,22 +7851,86 @@ var _user$project$ControlPanel$itemSecondLine = function (process) {
 								_elm_lang$core$Basics$toString(process.numWorkers)),
 								_elm_lang$html$Html_Attributes$name('numworkers'),
 								_elm_lang$html$Html_Attributes$autofocus(true),
-								_elm_lang$html$Html_Events$onInput(
-								_user$project$ControlPanel$RequestUpdateWorkers(process))
+								_elm_lang$html$Html_Events$onInput(_user$project$ControlPanel$UpdateWorkersModel)
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[]))
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('select'),
+						_elm_lang$html$Html_Events$onClick(
+						_user$project$ControlPanel$RequestUpdateWorkers(process))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Save')
 					]))
 			]));
 };
-var _user$project$ControlPanel$AddRemoveWorkers = function (a) {
-	return {ctor: 'AddRemoveWorkers', _0: a};
+var _user$project$ControlPanel$UpdateMpsModel = function (a) {
+	return {ctor: 'UpdateMpsModel', _0: a};
 };
-var _user$project$ControlPanel$workersToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$AddRemoveWorkers, _user$project$ControlPanel$convertWorkersUpdates);
-var _user$project$ControlPanel$RequestUpdateRetry = F2(
-	function (a, b) {
-		return {ctor: 'RequestUpdateRetry', _0: a, _1: b};
-	});
+var _user$project$ControlPanel$itemFifthLine = function (process) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('nextline')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$span,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('workers')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Messages per Second')
+					])),
+				A2(
+				_elm_lang$html$Html$span,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('numberfield')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$type$('number'),
+								_elm_lang$html$Html_Attributes$placeholder(
+								_elm_lang$core$Basics$toString(process.mps)),
+								_elm_lang$html$Html_Attributes$name('iqueue'),
+								_elm_lang$html$Html_Attributes$autofocus(true),
+								_elm_lang$html$Html_Events$onInput(_user$project$ControlPanel$UpdateMpsModel)
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[]))
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('select'),
+						_elm_lang$html$Html_Events$onClick(
+						_user$project$ControlPanel$RequestChangeMps(process))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Save')
+					]))
+			]));
+};
+var _user$project$ControlPanel$UpdateRetryModel = function (a) {
+	return {ctor: 'UpdateRetryModel', _0: a};
+};
 var _user$project$ControlPanel$itemFourthLine = function (process) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -7889,22 +7966,28 @@ var _user$project$ControlPanel$itemFourthLine = function (process) {
 								_elm_lang$html$Html_Attributes$placeholder(process.rQueue),
 								_elm_lang$html$Html_Attributes$name('iqueue'),
 								_elm_lang$html$Html_Attributes$autofocus(true),
-								_elm_lang$html$Html_Events$onInput(
-								_user$project$ControlPanel$RequestUpdateRetry(process))
+								_elm_lang$html$Html_Events$onInput(_user$project$ControlPanel$UpdateRetryModel)
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[]))
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('select'),
+						_elm_lang$html$Html_Events$onClick(
+						_user$project$ControlPanel$RequestUpdateRetry(process))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Save')
 					]))
 			]));
 };
-var _user$project$ControlPanel$UpdateRetryQueue = function (a) {
-	return {ctor: 'UpdateRetryQueue', _0: a};
+var _user$project$ControlPanel$UpdateInputModel = function (a) {
+	return {ctor: 'UpdateInputModel', _0: a};
 };
-var _user$project$ControlPanel$retryToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$UpdateRetryQueue, _user$project$ControlPanel$convertRetryUpdates);
-var _user$project$ControlPanel$RequestUpdateInput = F2(
-	function (a, b) {
-		return {ctor: 'RequestUpdateInput', _0: a, _1: b};
-	});
 var _user$project$ControlPanel$itemThirdLine = function (process) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -7940,18 +8023,25 @@ var _user$project$ControlPanel$itemThirdLine = function (process) {
 								_elm_lang$html$Html_Attributes$placeholder(process.iQueue),
 								_elm_lang$html$Html_Attributes$name('iqueue'),
 								_elm_lang$html$Html_Attributes$autofocus(true),
-								_elm_lang$html$Html_Events$onInput(
-								_user$project$ControlPanel$RequestUpdateInput(process))
+								_elm_lang$html$Html_Events$onInput(_user$project$ControlPanel$UpdateInputModel)
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[]))
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('select'),
+						_elm_lang$html$Html_Events$onClick(
+						_user$project$ControlPanel$RequestUpdateInput(process))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Save')
 					]))
 			]));
 };
-var _user$project$ControlPanel$UpdateInputQueue = function (a) {
-	return {ctor: 'UpdateInputQueue', _0: a};
-};
-var _user$project$ControlPanel$inputToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$UpdateInputQueue, _user$project$ControlPanel$convertInputUpdates);
 var _user$project$ControlPanel$Select = function (a) {
 	return {ctor: 'Select', _0: a};
 };
@@ -8161,7 +8251,7 @@ var _user$project$ControlPanel$view = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$ControlPanel$pageHeader,
+				_user$project$ControlPanel$pageHeader(model),
 				_user$project$ControlPanel$entryList(model.processes),
 				_user$project$ControlPanel$pageFooter
 			]));
