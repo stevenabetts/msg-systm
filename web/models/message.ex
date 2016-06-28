@@ -3,14 +3,13 @@ defmodule PanelDemon.Message do
 
   schema "messages" do
     field :status, :boolean, default: false
-    field :date, Ecto.DateTime, default: Ecto.DateTime.utc #delievered at
+    field :delivered_at, Ecto.DateTime
+    field :tags, :map
 
-    #have column for tags???? As json or csv??
-    has_many :tags, PanelDemon.Tags
     timestamps
   end
 
-  @required_fields ~w(status date)
+  @required_fields ~w(status delivered_at tags)
   @optional_fields ~w()
 
   @doc """
@@ -24,4 +23,3 @@ defmodule PanelDemon.Message do
     |> cast(params, @required_fields, @optional_fields)
   end
 end
-

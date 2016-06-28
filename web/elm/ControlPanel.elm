@@ -311,7 +311,7 @@ itemSecondLine process =
                   placeholder (toString process.numWorkers),
                   name "numworkers",
                   autofocus True,
-                  onInput (UpdateWorkersModel)--Save value to model, another button to send model info to JS
+                  onInput (UpdateWorkersModel)
                 ] []
              ],
              button [ class "select", onClick (RequestUpdateWorkers process) ] [ text "Save" ]]
@@ -326,7 +326,7 @@ itemThirdLine process =
                   placeholder process.iQueue,
                   name "iqueue",
                   autofocus True,
-                  onInput (UpdateInputModel)--save value to model, another button to send model info to JS
+                  onInput (UpdateInputModel)
                 ] []
              ],
              button [ class "select", onClick (RequestUpdateInput process) ] [ text "Save" ]]
