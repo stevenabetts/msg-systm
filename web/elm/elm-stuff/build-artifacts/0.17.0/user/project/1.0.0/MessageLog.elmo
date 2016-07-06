@@ -1,0 +1,31 @@
+var _user$project$MessageLog$pageHeader = function (model) {
+	return A2(
+		_elm_lang$html$Html$h1,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Message Log')
+			]));
+};
+var _user$project$MessageLog$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$id('container')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$MessageLog$pageHeader(model)
+			]));
+};
+var _user$project$MessageLog$Model = F4(
+	function (a, b, c, d) {
+		return {messages: a, searchQuery: b, filterByDate: c, filterByStatus: d};
+	});
+var _user$project$MessageLog$Message = F3(
+	function (a, b, c) {
+		return {id: a, status: b, deliveredAt: c};
+	});
+var _user$project$MessageLog$NoOp = {ctor: 'NoOp'};
