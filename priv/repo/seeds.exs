@@ -16,9 +16,11 @@
 #PanelDemon.Repo.insert!(%PanelDemon.Tag{name: "Offer"})
 #PanelDemon.Repo.insert!(%PanelDemon.Tag{name: "Proposal"})
 
-PanelDemon.Repo.insert!(%PanelDemon.Message{status: true, tags: %{"1" => "Offers", "2" => "Proposals"}})
+PanelDemon.Repo.insert!(%PanelDemon.Message{status: true, tags: ["Offers", "Proposals"]})
 #PanelDemon.Repo.insert!(%PanelDemon.Message{status: true})
-PanelDemon.Repo.insert!(%PanelDemon.Message{status: false, tags: %{"1" => "Proposals"}})
+PanelDemon.Repo.insert!(%PanelDemon.Message{status: false, tags: ["Offers"]})
 #PanelDemon.Repo.insert!(%PanelDemon.Message{status: false})
+
+#delivered_at: %{"year": 2016, "month": 07, "day": 12, "hour": 22, "minute": 6}
 
 

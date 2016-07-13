@@ -4,8 +4,9 @@ defmodule PanelDemon.Repo.Migrations.CreateMessage do
   def change do
     create table(:messages) do
       add :status, :boolean, default: false
-      add :delivered_at, :datetime
-      add :tags, :map
+      add :delivered_at, :datetime, default: Ecto.DateTime.utc
+
+      add :tags, {:array, :string}
 
       timestamps
     end

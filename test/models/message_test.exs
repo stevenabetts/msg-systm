@@ -3,7 +3,7 @@ defmodule PanelDemon.MessageTest do
 
   alias PanelDemon.Message
 
-  @valid_attrs %{delivered_at: "2010-04-17 14:00:00", status: true, tags: %{}}
+  @valid_attrs %{delivered_at: "2010-04-17 14:00:00", status: true, tags: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

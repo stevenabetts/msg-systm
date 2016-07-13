@@ -7192,860 +7192,7 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$ControlPanel$pageFooter = A2(
-	_elm_lang$html$Html$footer,
-	_elm_lang$core$Native_List.fromArray(
-		[]),
-	_elm_lang$core$Native_List.fromArray(
-		[
-			A2(
-			_elm_lang$html$Html$a,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$href('https://example.com')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html$text('Example Link')
-				]))
-		]));
-var _user$project$ControlPanel$pageHeader = function (model) {
-	return A2(
-		_elm_lang$html$Html$h1,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html$text('Message System Control Panel')
-			]));
-};
-var _user$project$ControlPanel$init = function () {
-	var initialModel = {
-		processes: _elm_lang$core$Native_List.fromArray(
-			[]),
-		nameInput: '',
-		nextID: 0,
-		inputModel: '',
-		retryModel: '',
-		mpsModel: '',
-		workersModel: ''
-	};
-	return {ctor: '_Tuple2', _0: initialModel, _1: _elm_lang$core$Platform_Cmd$none};
-}();
-var _user$project$ControlPanel$reconvertProcess = function (process) {
-	return {
-		name: function (_) {
-			return _.name;
-		}(process),
-		isActive: function (_) {
-			return _.isActive;
-		}(process),
-		mps: function (_) {
-			return _.mps;
-		}(process),
-		id: function (_) {
-			return _.id;
-		}(process),
-		numWorkers: function (_) {
-			return _.numWorkers;
-		}(process),
-		iQueue: function (_) {
-			return _.iQueue;
-		}(process),
-		rQueue: function (_) {
-			return _.rQueue;
-		}(process)
-	};
-};
-var _user$project$ControlPanel$convertProcess = function (dbprocess) {
-	return {
-		name: function (_) {
-			return _.name;
-		}(dbprocess),
-		isActive: function (_) {
-			return _.isActive;
-		}(dbprocess),
-		mps: function (_) {
-			return _.mps;
-		}(dbprocess),
-		id: function (_) {
-			return _.id;
-		}(dbprocess),
-		isSelected: false,
-		numWorkers: function (_) {
-			return _.numWorkers;
-		}(dbprocess),
-		iQueue: function (_) {
-			return _.iQueue;
-		}(dbprocess),
-		rQueue: function (_) {
-			return _.rQueue;
-		}(dbprocess)
-	};
-};
-var _user$project$ControlPanel$newProcess = F4(
-	function (name, id, iQueue, rQueue) {
-		return {name: name, isActive: false, mps: 0, id: id, isSelected: false, numWorkers: 0, iQueue: iQueue, rQueue: rQueue};
-	});
-var _user$project$ControlPanel$processLists = _elm_lang$core$Native_Platform.incomingPort(
-	'processLists',
-	_elm_lang$core$Json_Decode$list(
-		A2(
-			_elm_lang$core$Json_Decode$andThen,
-			A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
-			function (name) {
-				return A2(
-					_elm_lang$core$Json_Decode$andThen,
-					A2(_elm_lang$core$Json_Decode_ops[':='], 'isActive', _elm_lang$core$Json_Decode$bool),
-					function (isActive) {
-						return A2(
-							_elm_lang$core$Json_Decode$andThen,
-							A2(_elm_lang$core$Json_Decode_ops[':='], 'mps', _elm_lang$core$Json_Decode$int),
-							function (mps) {
-								return A2(
-									_elm_lang$core$Json_Decode$andThen,
-									A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int),
-									function (id) {
-										return A2(
-											_elm_lang$core$Json_Decode$andThen,
-											A2(_elm_lang$core$Json_Decode_ops[':='], 'numWorkers', _elm_lang$core$Json_Decode$int),
-											function (numWorkers) {
-												return A2(
-													_elm_lang$core$Json_Decode$andThen,
-													A2(_elm_lang$core$Json_Decode_ops[':='], 'iQueue', _elm_lang$core$Json_Decode$string),
-													function (iQueue) {
-														return A2(
-															_elm_lang$core$Json_Decode$andThen,
-															A2(_elm_lang$core$Json_Decode_ops[':='], 'rQueue', _elm_lang$core$Json_Decode$string),
-															function (rQueue) {
-																return _elm_lang$core$Json_Decode$succeed(
-																	{name: name, isActive: isActive, mps: mps, id: id, numWorkers: numWorkers, iQueue: iQueue, rQueue: rQueue});
-															});
-													});
-											});
-									});
-							});
-					});
-			})));
-var _user$project$ControlPanel$processActivationUpdates = _elm_lang$core$Native_Platform.incomingPort(
-	'processActivationUpdates',
-	A2(
-		_elm_lang$core$Json_Decode$andThen,
-		A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
-		function (name) {
-			return A2(
-				_elm_lang$core$Json_Decode$andThen,
-				A2(_elm_lang$core$Json_Decode_ops[':='], 'isActive', _elm_lang$core$Json_Decode$bool),
-				function (isActive) {
-					return A2(
-						_elm_lang$core$Json_Decode$andThen,
-						A2(_elm_lang$core$Json_Decode_ops[':='], 'mps', _elm_lang$core$Json_Decode$int),
-						function (mps) {
-							return A2(
-								_elm_lang$core$Json_Decode$andThen,
-								A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int),
-								function (id) {
-									return A2(
-										_elm_lang$core$Json_Decode$andThen,
-										A2(_elm_lang$core$Json_Decode_ops[':='], 'numWorkers', _elm_lang$core$Json_Decode$int),
-										function (numWorkers) {
-											return A2(
-												_elm_lang$core$Json_Decode$andThen,
-												A2(_elm_lang$core$Json_Decode_ops[':='], 'iQueue', _elm_lang$core$Json_Decode$string),
-												function (iQueue) {
-													return A2(
-														_elm_lang$core$Json_Decode$andThen,
-														A2(_elm_lang$core$Json_Decode_ops[':='], 'rQueue', _elm_lang$core$Json_Decode$string),
-														function (rQueue) {
-															return _elm_lang$core$Json_Decode$succeed(
-																{name: name, isActive: isActive, mps: mps, id: id, numWorkers: numWorkers, iQueue: iQueue, rQueue: rQueue});
-														});
-												});
-										});
-								});
-						});
-				});
-		}));
-var _user$project$ControlPanel$convertActivationUpdates = _user$project$ControlPanel$processActivationUpdates(_user$project$ControlPanel$convertProcess);
-var _user$project$ControlPanel$processActivationRequests = _elm_lang$core$Native_Platform.outgoingPort(
-	'processActivationRequests',
-	function (v) {
-		return {name: v.name, isActive: v.isActive, mps: v.mps, id: v.id, numWorkers: v.numWorkers, iQueue: v.iQueue, rQueue: v.rQueue};
-	});
-var _user$project$ControlPanel$changeWorkersRequests = _elm_lang$core$Native_Platform.outgoingPort(
-	'changeWorkersRequests',
-	function (v) {
-		return {id: v.id, value: v.value};
-	});
-var _user$project$ControlPanel$changeWorkersUpdates = _elm_lang$core$Native_Platform.incomingPort(
-	'changeWorkersUpdates',
-	A2(
-		_elm_lang$core$Json_Decode$andThen,
-		A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
-		function (name) {
-			return A2(
-				_elm_lang$core$Json_Decode$andThen,
-				A2(_elm_lang$core$Json_Decode_ops[':='], 'isActive', _elm_lang$core$Json_Decode$bool),
-				function (isActive) {
-					return A2(
-						_elm_lang$core$Json_Decode$andThen,
-						A2(_elm_lang$core$Json_Decode_ops[':='], 'mps', _elm_lang$core$Json_Decode$int),
-						function (mps) {
-							return A2(
-								_elm_lang$core$Json_Decode$andThen,
-								A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int),
-								function (id) {
-									return A2(
-										_elm_lang$core$Json_Decode$andThen,
-										A2(_elm_lang$core$Json_Decode_ops[':='], 'numWorkers', _elm_lang$core$Json_Decode$int),
-										function (numWorkers) {
-											return A2(
-												_elm_lang$core$Json_Decode$andThen,
-												A2(_elm_lang$core$Json_Decode_ops[':='], 'iQueue', _elm_lang$core$Json_Decode$string),
-												function (iQueue) {
-													return A2(
-														_elm_lang$core$Json_Decode$andThen,
-														A2(_elm_lang$core$Json_Decode_ops[':='], 'rQueue', _elm_lang$core$Json_Decode$string),
-														function (rQueue) {
-															return _elm_lang$core$Json_Decode$succeed(
-																{name: name, isActive: isActive, mps: mps, id: id, numWorkers: numWorkers, iQueue: iQueue, rQueue: rQueue});
-														});
-												});
-										});
-								});
-						});
-				});
-		}));
-var _user$project$ControlPanel$convertWorkersUpdates = _user$project$ControlPanel$changeWorkersUpdates(_user$project$ControlPanel$convertProcess);
-var _user$project$ControlPanel$updateInputRequests = _elm_lang$core$Native_Platform.outgoingPort(
-	'updateInputRequests',
-	function (v) {
-		return {id: v.id, string: v.string};
-	});
-var _user$project$ControlPanel$changeInputUpdates = _elm_lang$core$Native_Platform.incomingPort(
-	'changeInputUpdates',
-	A2(
-		_elm_lang$core$Json_Decode$andThen,
-		A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
-		function (name) {
-			return A2(
-				_elm_lang$core$Json_Decode$andThen,
-				A2(_elm_lang$core$Json_Decode_ops[':='], 'isActive', _elm_lang$core$Json_Decode$bool),
-				function (isActive) {
-					return A2(
-						_elm_lang$core$Json_Decode$andThen,
-						A2(_elm_lang$core$Json_Decode_ops[':='], 'mps', _elm_lang$core$Json_Decode$int),
-						function (mps) {
-							return A2(
-								_elm_lang$core$Json_Decode$andThen,
-								A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int),
-								function (id) {
-									return A2(
-										_elm_lang$core$Json_Decode$andThen,
-										A2(_elm_lang$core$Json_Decode_ops[':='], 'numWorkers', _elm_lang$core$Json_Decode$int),
-										function (numWorkers) {
-											return A2(
-												_elm_lang$core$Json_Decode$andThen,
-												A2(_elm_lang$core$Json_Decode_ops[':='], 'iQueue', _elm_lang$core$Json_Decode$string),
-												function (iQueue) {
-													return A2(
-														_elm_lang$core$Json_Decode$andThen,
-														A2(_elm_lang$core$Json_Decode_ops[':='], 'rQueue', _elm_lang$core$Json_Decode$string),
-														function (rQueue) {
-															return _elm_lang$core$Json_Decode$succeed(
-																{name: name, isActive: isActive, mps: mps, id: id, numWorkers: numWorkers, iQueue: iQueue, rQueue: rQueue});
-														});
-												});
-										});
-								});
-						});
-				});
-		}));
-var _user$project$ControlPanel$convertInputUpdates = _user$project$ControlPanel$changeInputUpdates(_user$project$ControlPanel$convertProcess);
-var _user$project$ControlPanel$updateRetryRequests = _elm_lang$core$Native_Platform.outgoingPort(
-	'updateRetryRequests',
-	function (v) {
-		return {id: v.id, string: v.string};
-	});
-var _user$project$ControlPanel$changeRetryUpdates = _elm_lang$core$Native_Platform.incomingPort(
-	'changeRetryUpdates',
-	A2(
-		_elm_lang$core$Json_Decode$andThen,
-		A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
-		function (name) {
-			return A2(
-				_elm_lang$core$Json_Decode$andThen,
-				A2(_elm_lang$core$Json_Decode_ops[':='], 'isActive', _elm_lang$core$Json_Decode$bool),
-				function (isActive) {
-					return A2(
-						_elm_lang$core$Json_Decode$andThen,
-						A2(_elm_lang$core$Json_Decode_ops[':='], 'mps', _elm_lang$core$Json_Decode$int),
-						function (mps) {
-							return A2(
-								_elm_lang$core$Json_Decode$andThen,
-								A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int),
-								function (id) {
-									return A2(
-										_elm_lang$core$Json_Decode$andThen,
-										A2(_elm_lang$core$Json_Decode_ops[':='], 'numWorkers', _elm_lang$core$Json_Decode$int),
-										function (numWorkers) {
-											return A2(
-												_elm_lang$core$Json_Decode$andThen,
-												A2(_elm_lang$core$Json_Decode_ops[':='], 'iQueue', _elm_lang$core$Json_Decode$string),
-												function (iQueue) {
-													return A2(
-														_elm_lang$core$Json_Decode$andThen,
-														A2(_elm_lang$core$Json_Decode_ops[':='], 'rQueue', _elm_lang$core$Json_Decode$string),
-														function (rQueue) {
-															return _elm_lang$core$Json_Decode$succeed(
-																{name: name, isActive: isActive, mps: mps, id: id, numWorkers: numWorkers, iQueue: iQueue, rQueue: rQueue});
-														});
-												});
-										});
-								});
-						});
-				});
-		}));
-var _user$project$ControlPanel$convertRetryUpdates = _user$project$ControlPanel$changeRetryUpdates(_user$project$ControlPanel$convertProcess);
-var _user$project$ControlPanel$changeMpsRequests = _elm_lang$core$Native_Platform.outgoingPort(
-	'changeMpsRequests',
-	function (v) {
-		return {id: v.id, value: v.value};
-	});
-var _user$project$ControlPanel$update = F2(
-	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
-			case 'NoOp':
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			case 'Select':
-				var updateEntry = function (e) {
-					return _elm_lang$core$Native_Utils.eq(e.id, _p0._0) ? _elm_lang$core$Native_Utils.update(
-						e,
-						{
-							isSelected: _elm_lang$core$Basics$not(e.isSelected)
-						}) : e;
-				};
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							processes: A2(_elm_lang$core$List$map, updateEntry, model.processes)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'UpdateInputModel':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{inputModel: _p0._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'UpdateRetryModel':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{retryModel: _p0._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'UpdateMpsModel':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{mpsModel: _p0._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'UpdateWorkersModel':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{workersModel: _p0._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'Activate':
-				var _p1 = _p0._0;
-				var updateEntry = function (e) {
-					return _elm_lang$core$Native_Utils.eq(e.id, _p1.id) ? _elm_lang$core$Native_Utils.update(
-						e,
-						{isActive: _p1.isActive}) : e;
-				};
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							processes: A2(_elm_lang$core$List$map, updateEntry, model.processes)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'RequestActivate':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: _user$project$ControlPanel$processActivationRequests(
-						_user$project$ControlPanel$reconvertProcess(_p0._0))
-				};
-			case 'UpdateInputQueue':
-				var _p2 = _p0._0;
-				var updateEntry = function (e) {
-					return _elm_lang$core$Native_Utils.eq(e.id, _p2.id) ? _elm_lang$core$Native_Utils.update(
-						e,
-						{iQueue: _p2.iQueue}) : e;
-				};
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							processes: A2(_elm_lang$core$List$map, updateEntry, model.processes)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'RequestUpdateInput':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: _user$project$ControlPanel$updateInputRequests(
-						{id: _p0._0.id, string: model.inputModel})
-				};
-			case 'UpdateRetryQueue':
-				var _p3 = _p0._0;
-				var updateEntry = function (e) {
-					return _elm_lang$core$Native_Utils.eq(e.id, _p3.id) ? _elm_lang$core$Native_Utils.update(
-						e,
-						{rQueue: _p3.rQueue}) : e;
-				};
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							processes: A2(_elm_lang$core$List$map, updateEntry, model.processes)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'RequestUpdateRetry':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: _user$project$ControlPanel$updateRetryRequests(
-						{id: _p0._0.id, string: model.retryModel})
-				};
-			case 'AddRemoveWorkers':
-				var _p4 = _p0._0;
-				var updateEntry = function (e) {
-					return _elm_lang$core$Native_Utils.eq(e.id, _p4.id) ? _elm_lang$core$Native_Utils.update(
-						e,
-						{numWorkers: _p4.numWorkers}) : e;
-				};
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							processes: A2(_elm_lang$core$List$map, updateEntry, model.processes)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'RequestUpdateWorkers':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: _user$project$ControlPanel$changeWorkersRequests(
-						{
-							id: _p0._0.id,
-							value: A2(
-								_elm_lang$core$Maybe$withDefault,
-								0,
-								_elm_lang$core$Result$toMaybe(
-									_elm_lang$core$String$toInt(model.workersModel)))
-						})
-				};
-			case 'ChangeMps':
-				var _p5 = _p0._0;
-				var updateEntry = function (e) {
-					return _elm_lang$core$Native_Utils.eq(e.id, _p5.id) ? _elm_lang$core$Native_Utils.update(
-						e,
-						{mps: _p5.mps}) : e;
-				};
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							processes: A2(_elm_lang$core$List$map, updateEntry, model.processes)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'RequestChangeMps':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: _user$project$ControlPanel$changeMpsRequests(
-						{
-							id: _p0._0.id,
-							value: A2(
-								_elm_lang$core$Maybe$withDefault,
-								0,
-								_elm_lang$core$Result$toMaybe(
-									_elm_lang$core$String$toInt(model.mpsModel)))
-						})
-				};
-			default:
-				var _p6 = _p0._0;
-				var entriesToAdd = A2(_elm_lang$core$List$map, _user$project$ControlPanel$convertProcess, _p6);
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							nameInput: '',
-							inputModel: '',
-							retryModel: '',
-							mpsModel: '',
-							workersModel: '',
-							processes: entriesToAdd,
-							nextID: _elm_lang$core$List$length(_p6) + 1
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-		}
-	});
-var _user$project$ControlPanel$changeMpsUpdates = _elm_lang$core$Native_Platform.incomingPort(
-	'changeMpsUpdates',
-	A2(
-		_elm_lang$core$Json_Decode$andThen,
-		A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
-		function (name) {
-			return A2(
-				_elm_lang$core$Json_Decode$andThen,
-				A2(_elm_lang$core$Json_Decode_ops[':='], 'isActive', _elm_lang$core$Json_Decode$bool),
-				function (isActive) {
-					return A2(
-						_elm_lang$core$Json_Decode$andThen,
-						A2(_elm_lang$core$Json_Decode_ops[':='], 'mps', _elm_lang$core$Json_Decode$int),
-						function (mps) {
-							return A2(
-								_elm_lang$core$Json_Decode$andThen,
-								A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int),
-								function (id) {
-									return A2(
-										_elm_lang$core$Json_Decode$andThen,
-										A2(_elm_lang$core$Json_Decode_ops[':='], 'numWorkers', _elm_lang$core$Json_Decode$int),
-										function (numWorkers) {
-											return A2(
-												_elm_lang$core$Json_Decode$andThen,
-												A2(_elm_lang$core$Json_Decode_ops[':='], 'iQueue', _elm_lang$core$Json_Decode$string),
-												function (iQueue) {
-													return A2(
-														_elm_lang$core$Json_Decode$andThen,
-														A2(_elm_lang$core$Json_Decode_ops[':='], 'rQueue', _elm_lang$core$Json_Decode$string),
-														function (rQueue) {
-															return _elm_lang$core$Json_Decode$succeed(
-																{name: name, isActive: isActive, mps: mps, id: id, numWorkers: numWorkers, iQueue: iQueue, rQueue: rQueue});
-														});
-												});
-										});
-								});
-						});
-				});
-		}));
-var _user$project$ControlPanel$convertMpsUpdates = _user$project$ControlPanel$changeMpsUpdates(_user$project$ControlPanel$convertProcess);
-var _user$project$ControlPanel$Model = F7(
-	function (a, b, c, d, e, f, g) {
-		return {processes: a, nameInput: b, nextID: c, inputModel: d, retryModel: e, mpsModel: f, workersModel: g};
-	});
-var _user$project$ControlPanel$Process = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {name: a, isActive: b, mps: c, id: d, isSelected: e, numWorkers: f, iQueue: g, rQueue: h};
-	});
-var _user$project$ControlPanel$DBProcess = F7(
-	function (a, b, c, d, e, f, g) {
-		return {name: a, isActive: b, mps: c, id: d, numWorkers: e, iQueue: f, rQueue: g};
-	});
-var _user$project$ControlPanel$SetProcesses = function (a) {
-	return {ctor: 'SetProcesses', _0: a};
-};
-var _user$project$ControlPanel$processListsToSet = _user$project$ControlPanel$processLists(_user$project$ControlPanel$SetProcesses);
-var _user$project$ControlPanel$RequestActivate = function (a) {
-	return {ctor: 'RequestActivate', _0: a};
-};
-var _user$project$ControlPanel$Activate = function (a) {
-	return {ctor: 'Activate', _0: a};
-};
-var _user$project$ControlPanel$processesToActivate = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$Activate, _user$project$ControlPanel$convertActivationUpdates);
-var _user$project$ControlPanel$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$batch(
-		_elm_lang$core$Native_List.fromArray(
-			[_user$project$ControlPanel$processListsToSet, _user$project$ControlPanel$processesToActivate]));
-};
-var _user$project$ControlPanel$RequestChangeMps = function (a) {
-	return {ctor: 'RequestChangeMps', _0: a};
-};
-var _user$project$ControlPanel$ChangeMps = function (a) {
-	return {ctor: 'ChangeMps', _0: a};
-};
-var _user$project$ControlPanel$mpsToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$ChangeMps, _user$project$ControlPanel$convertMpsUpdates);
-var _user$project$ControlPanel$RequestUpdateWorkers = function (a) {
-	return {ctor: 'RequestUpdateWorkers', _0: a};
-};
-var _user$project$ControlPanel$AddRemoveWorkers = function (a) {
-	return {ctor: 'AddRemoveWorkers', _0: a};
-};
-var _user$project$ControlPanel$workersToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$AddRemoveWorkers, _user$project$ControlPanel$convertWorkersUpdates);
-var _user$project$ControlPanel$RequestUpdateRetry = function (a) {
-	return {ctor: 'RequestUpdateRetry', _0: a};
-};
-var _user$project$ControlPanel$UpdateRetryQueue = function (a) {
-	return {ctor: 'UpdateRetryQueue', _0: a};
-};
-var _user$project$ControlPanel$retryToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$UpdateRetryQueue, _user$project$ControlPanel$convertRetryUpdates);
-var _user$project$ControlPanel$RequestUpdateInput = function (a) {
-	return {ctor: 'RequestUpdateInput', _0: a};
-};
-var _user$project$ControlPanel$UpdateInputQueue = function (a) {
-	return {ctor: 'UpdateInputQueue', _0: a};
-};
-var _user$project$ControlPanel$inputToChange = A2(_elm_lang$core$Platform_Sub$map, _user$project$ControlPanel$UpdateInputQueue, _user$project$ControlPanel$convertInputUpdates);
-var _user$project$ControlPanel$UpdateWorkersModel = function (a) {
-	return {ctor: 'UpdateWorkersModel', _0: a};
-};
-var _user$project$ControlPanel$itemSecondLine = function (process) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('nextline')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('workers')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Number of Workers')
-					])),
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('numberfield')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$input,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$type$('number'),
-								_elm_lang$html$Html_Attributes$placeholder(
-								_elm_lang$core$Basics$toString(process.numWorkers)),
-								_elm_lang$html$Html_Attributes$name('numworkers'),
-								_elm_lang$html$Html_Attributes$autofocus(true),
-								_elm_lang$html$Html_Events$onInput(_user$project$ControlPanel$UpdateWorkersModel)
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[]))
-					])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('select'),
-						_elm_lang$html$Html_Events$onClick(
-						_user$project$ControlPanel$RequestUpdateWorkers(process))
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Save')
-					]))
-			]));
-};
-var _user$project$ControlPanel$UpdateMpsModel = function (a) {
-	return {ctor: 'UpdateMpsModel', _0: a};
-};
-var _user$project$ControlPanel$itemFifthLine = function (process) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('nextline')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('workers')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Messages per Second')
-					])),
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('numberfield')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$input,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$type$('number'),
-								_elm_lang$html$Html_Attributes$placeholder(
-								_elm_lang$core$Basics$toString(process.mps)),
-								_elm_lang$html$Html_Attributes$name('iqueue'),
-								_elm_lang$html$Html_Attributes$autofocus(true),
-								_elm_lang$html$Html_Events$onInput(_user$project$ControlPanel$UpdateMpsModel)
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[]))
-					])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('select'),
-						_elm_lang$html$Html_Events$onClick(
-						_user$project$ControlPanel$RequestChangeMps(process))
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Save')
-					]))
-			]));
-};
-var _user$project$ControlPanel$UpdateRetryModel = function (a) {
-	return {ctor: 'UpdateRetryModel', _0: a};
-};
-var _user$project$ControlPanel$itemFourthLine = function (process) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('nextline')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('workers')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Retry Queue')
-					])),
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('stringfield')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$input,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$type$('text'),
-								_elm_lang$html$Html_Attributes$placeholder(process.rQueue),
-								_elm_lang$html$Html_Attributes$name('iqueue'),
-								_elm_lang$html$Html_Attributes$autofocus(true),
-								_elm_lang$html$Html_Events$onInput(_user$project$ControlPanel$UpdateRetryModel)
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[]))
-					])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('select'),
-						_elm_lang$html$Html_Events$onClick(
-						_user$project$ControlPanel$RequestUpdateRetry(process))
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Save')
-					]))
-			]));
-};
-var _user$project$ControlPanel$UpdateInputModel = function (a) {
-	return {ctor: 'UpdateInputModel', _0: a};
-};
-var _user$project$ControlPanel$itemThirdLine = function (process) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('nextline')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('workers')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Input Queue')
-					])),
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('stringfield')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$input,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$type$('text'),
-								_elm_lang$html$Html_Attributes$placeholder(process.iQueue),
-								_elm_lang$html$Html_Attributes$name('iqueue'),
-								_elm_lang$html$Html_Attributes$autofocus(true),
-								_elm_lang$html$Html_Events$onInput(_user$project$ControlPanel$UpdateInputModel)
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[]))
-					])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('select'),
-						_elm_lang$html$Html_Events$onClick(
-						_user$project$ControlPanel$RequestUpdateInput(process))
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Save')
-					]))
-			]));
-};
-var _user$project$ControlPanel$Select = function (a) {
-	return {ctor: 'Select', _0: a};
-};
-var _user$project$ControlPanel$itemFirstLine = function (process) {
+var _user$project$MessageLog$itemFirstLine = function (message) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8062,9 +7209,10 @@ var _user$project$ControlPanel$itemFirstLine = function (process) {
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text(process.name)
+						_elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(message.id))
 					])),
-				_elm_lang$core$Native_Utils.eq(process.isActive, true) ? A2(
+				_elm_lang$core$Native_Utils.eq(message.status, true) ? A2(
 				_elm_lang$html$Html$span,
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -8072,7 +7220,7 @@ var _user$project$ControlPanel$itemFirstLine = function (process) {
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Active')
+						_elm_lang$html$Html$text('Delivered')
 					])) : A2(
 				_elm_lang$html$Html$span,
 				_elm_lang$core$Native_List.fromArray(
@@ -8081,145 +7229,23 @@ var _user$project$ControlPanel$itemFirstLine = function (process) {
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Inactive')
+						_elm_lang$html$Html$text('Pending')
 					])),
-				_elm_lang$core$Native_Utils.eq(process.isActive, true) ? A2(
+				A2(
 				_elm_lang$html$Html$span,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$class('bgtoggleoff')
+						_elm_lang$html$Html_Attributes$class('numberfield')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						A2(
-						_elm_lang$html$Html$button,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('toggleoff'),
-								_elm_lang$html$Html_Events$onClick(
-								_user$project$ControlPanel$RequestActivate(process))
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_elm_lang$html$Html$span,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$style(
-								_elm_lang$core$Native_List.fromArray(
-									[
-										{ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
-										{ctor: '_Tuple2', _0: 'clip', _1: 'rect(0px, 0px, 0px, 0px)'}
-									]))
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text('Off')
-							])),
-						A2(
-						_elm_lang$html$Html$span,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$style(
-								_elm_lang$core$Native_List.fromArray(
-									[
-										{ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
-										{ctor: '_Tuple2', _0: 'clip', _1: 'rect(0px, 0px, 0px, 0px)'}
-									]))
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text('On')
-							]))
-					])) : A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('bgtoggleon')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$button,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('toggleon'),
-								_elm_lang$html$Html_Events$onClick(
-								_user$project$ControlPanel$RequestActivate(process))
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_elm_lang$html$Html$span,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$style(
-								_elm_lang$core$Native_List.fromArray(
-									[
-										{ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
-										{ctor: '_Tuple2', _0: 'clip', _1: 'rect(0px, 0px, 0px, 0px)'}
-									]))
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text('Off')
-							])),
-						A2(
-						_elm_lang$html$Html$span,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$style(
-								_elm_lang$core$Native_List.fromArray(
-									[
-										{ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
-										{ctor: '_Tuple2', _0: 'clip', _1: 'rect(0px, 0px, 0px, 0px)'}
-									]))
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text('On')
-							]))
-					])),
-				_elm_lang$core$Native_Utils.eq(process.isSelected, true) ? A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('select'),
-						_elm_lang$html$Html_Events$onClick(
-						_user$project$ControlPanel$Select(process.id))
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Close')
-					])) : A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('select'),
-						_elm_lang$html$Html_Events$onClick(
-						_user$project$ControlPanel$Select(process.id))
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Edit')
+						_elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(message.deliveredAt))
 					]))
 			]));
 };
-var _user$project$ControlPanel$entryItem = function (process) {
-	return _elm_lang$core$Native_Utils.eq(process.isSelected, true) ? A2(
-		_elm_lang$html$Html$li,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('big')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_user$project$ControlPanel$itemFirstLine(process),
-				_user$project$ControlPanel$itemSecondLine(process),
-				_user$project$ControlPanel$itemThirdLine(process),
-				_user$project$ControlPanel$itemFourthLine(process),
-				_user$project$ControlPanel$itemFifthLine(process)
-			])) : A2(
+var _user$project$MessageLog$messageItem = function (message) {
+	return A2(
 		_elm_lang$html$Html$li,
 		_elm_lang$core$Native_List.fromArray(
 			[
@@ -8227,18 +7253,235 @@ var _user$project$ControlPanel$entryItem = function (process) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$ControlPanel$itemFirstLine(process)
+				_user$project$MessageLog$itemFirstLine(message)
 			]));
 };
-var _user$project$ControlPanel$entryList = function (processes) {
-	var entryItems = A2(_elm_lang$core$List$map, _user$project$ControlPanel$entryItem, processes);
+var _user$project$MessageLog$messageList = function (messages) {
+	var messageItems = A2(_elm_lang$core$List$map, _user$project$MessageLog$messageItem, messages);
 	return A2(
 		_elm_lang$html$Html$ul,
 		_elm_lang$core$Native_List.fromArray(
 			[]),
-		entryItems);
+		messageItems);
 };
-var _user$project$ControlPanel$view = function (model) {
+var _user$project$MessageLog$pageHeader = function (model) {
+	return A2(
+		_elm_lang$html$Html$h1,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Message Log')
+			]));
+};
+var _user$project$MessageLog$init = function () {
+	var initialModel = {
+		messages: _elm_lang$core$Native_List.fromArray(
+			[]),
+		searchQuery: _elm_lang$core$Native_List.fromArray(
+			[]),
+		tagInput: '',
+		filterByDate: false,
+		filterByStatus: false
+	};
+	return {ctor: '_Tuple2', _0: initialModel, _1: _elm_lang$core$Platform_Cmd$none};
+}();
+var _user$project$MessageLog$convertMessage = function (dbmessage) {
+	return {
+		id: function (_) {
+			return _.id;
+		}(dbmessage),
+		status: function (_) {
+			return _.status;
+		}(dbmessage),
+		deliveredAt: function (_) {
+			return _.deliveredAt;
+		}(dbmessage)
+	};
+};
+var _user$project$MessageLog$searchRequests = _elm_lang$core$Native_Platform.outgoingPort(
+	'searchRequests',
+	function (v) {
+		return _elm_lang$core$Native_List.toArray(v).map(
+			function (v) {
+				return v;
+			});
+	});
+var _user$project$MessageLog$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'NoOp':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'UpdateTagInput':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{tagInput: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UpdateSearchQuery':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							searchQuery: A2(_elm_lang$core$List_ops['::'], _p0._0, model.searchQuery)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SearchMessages':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$MessageLog$searchRequests(model.searchQuery)
+				};
+			case 'DisplayMessages':
+				var messagesToShow = A2(_elm_lang$core$List$map, _user$project$MessageLog$convertMessage, _p0._0);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{messages: messagesToShow}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							searchQuery: _elm_lang$core$Native_List.fromArray(
+								[])
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _user$project$MessageLog$searchUpdates = _elm_lang$core$Native_Platform.incomingPort(
+	'searchUpdates',
+	_elm_lang$core$Json_Decode$list(
+		A2(
+			_elm_lang$core$Json_Decode$andThen,
+			A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int),
+			function (id) {
+				return A2(
+					_elm_lang$core$Json_Decode$andThen,
+					A2(_elm_lang$core$Json_Decode_ops[':='], 'status', _elm_lang$core$Json_Decode$bool),
+					function (status) {
+						return A2(
+							_elm_lang$core$Json_Decode$andThen,
+							A2(_elm_lang$core$Json_Decode_ops[':='], 'deliveredAt', _elm_lang$core$Json_Decode$string),
+							function (deliveredAt) {
+								return A2(
+									_elm_lang$core$Json_Decode$andThen,
+									A2(
+										_elm_lang$core$Json_Decode_ops[':='],
+										'tags',
+										_elm_lang$core$Json_Decode$succeed(
+											{})),
+									function (tags) {
+										return _elm_lang$core$Json_Decode$succeed(
+											{id: id, status: status, deliveredAt: deliveredAt, tags: tags});
+									});
+							});
+					});
+			})));
+var _user$project$MessageLog$Model = F5(
+	function (a, b, c, d, e) {
+		return {messages: a, searchQuery: b, tagInput: c, filterByDate: d, filterByStatus: e};
+	});
+var _user$project$MessageLog$Message = F3(
+	function (a, b, c) {
+		return {id: a, status: b, deliveredAt: c};
+	});
+var _user$project$MessageLog$DBMessage = F4(
+	function (a, b, c, d) {
+		return {id: a, status: b, deliveredAt: c, tags: d};
+	});
+var _user$project$MessageLog$ClearSearchQuery = {ctor: 'ClearSearchQuery'};
+var _user$project$MessageLog$DisplayMessages = function (a) {
+	return {ctor: 'DisplayMessages', _0: a};
+};
+var _user$project$MessageLog$subscriptions = function (model) {
+	return _user$project$MessageLog$searchUpdates(_user$project$MessageLog$DisplayMessages);
+};
+var _user$project$MessageLog$SearchMessages = {ctor: 'SearchMessages'};
+var _user$project$MessageLog$UpdateSearchQuery = function (a) {
+	return {ctor: 'UpdateSearchQuery', _0: a};
+};
+var _user$project$MessageLog$UpdateTagInput = function (a) {
+	return {ctor: 'UpdateTagInput', _0: a};
+};
+var _user$project$MessageLog$filterForm = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$input,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$type$('text'),
+						_elm_lang$html$Html_Attributes$placeholder('Add Tag'),
+						_elm_lang$html$Html_Attributes$name('tag'),
+						_elm_lang$html$Html_Attributes$autofocus(true),
+						_elm_lang$html$Html_Events$onInput(_user$project$MessageLog$UpdateTagInput)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('add'),
+						_elm_lang$html$Html_Events$onClick(
+						_user$project$MessageLog$UpdateSearchQuery(model.tagInput))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Add')
+					])),
+				A2(
+				_elm_lang$html$Html$h2,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Current Query: ',
+							_elm_lang$core$Basics$toString(model.searchQuery)))
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('add'),
+						_elm_lang$html$Html_Events$onClick(_user$project$MessageLog$ClearSearchQuery)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Clear')
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('add'),
+						_elm_lang$html$Html_Events$onClick(_user$project$MessageLog$SearchMessages)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Search')
+					]))
+			]));
+};
+var _user$project$MessageLog$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8247,20 +7490,20 @@ var _user$project$ControlPanel$view = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$ControlPanel$pageHeader(model),
-				_user$project$ControlPanel$entryList(model.processes),
-				_user$project$ControlPanel$pageFooter
+				_user$project$MessageLog$pageHeader(model),
+				_user$project$MessageLog$filterForm(model),
+				_user$project$MessageLog$messageList(model.messages)
 			]));
 };
-var _user$project$ControlPanel$main = {
+var _user$project$MessageLog$main = {
 	main: _elm_lang$html$Html_App$program(
-		{init: _user$project$ControlPanel$init, view: _user$project$ControlPanel$view, update: _user$project$ControlPanel$update, subscriptions: _user$project$ControlPanel$subscriptions})
+		{init: _user$project$MessageLog$init, view: _user$project$MessageLog$view, update: _user$project$MessageLog$update, subscriptions: _user$project$MessageLog$subscriptions})
 };
-var _user$project$ControlPanel$NoOp = {ctor: 'NoOp'};
+var _user$project$MessageLog$NoOp = {ctor: 'NoOp'};
 
 var Elm = {};
-Elm['ControlPanel'] = Elm['ControlPanel'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['ControlPanel'], 'ControlPanel', typeof _user$project$ControlPanel$main === 'undefined' ? null : _user$project$ControlPanel$main);
+Elm['MessageLog'] = Elm['MessageLog'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['MessageLog'], 'MessageLog', typeof _user$project$MessageLog$main === 'undefined' ? null : _user$project$MessageLog$main);
 
 if (typeof define === "function" && define['amd'])
 {

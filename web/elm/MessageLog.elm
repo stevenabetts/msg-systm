@@ -24,6 +24,25 @@ type alias Message =
         deliveredAt: String
     }
 
+type alias DBMessage = 
+    {
+        id: Int,
+        status: Bool,
+        deliveredAt: String,
+        tags: {}
+    }
+
+type alias DBMessageList =
+  List DBMessage
+
+convertMessage : DBMessage -> Message
+convertMessage dbmessage = 
+  {
+    id = .id dbmessage,
+    status = .status dbmessage,
+    deliveredAt = .deliveredAt dbmessage
+  }
+
 init : (Model, Cmd Msg)
 init =
   let
@@ -44,6 +63,9 @@ type Msg
     = NoOp
     | UpdateTagInput String
     | UpdateSearchQuery String
+    | SearchMessages
+    | DisplayMessages DBMessageList
+    | ClearSearchQuery
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -57,7 +79,17 @@ update msg model =
     UpdateSearchQuery content ->
       ({model | searchQuery = content :: model.searchQuery}, Cmd.none)
 
+    SearchMessages ->
+      (model, searchRequests model.searchQuery)
+    
+    DisplayMessages dbmessagelist ->
+      let
+        messagesToShow = List.map convertMessage dbmessagelist
+      in
+        ({model | messages = messagesToShow}, Cmd.none)
 
+    ClearSearchQuery ->
+      ({model | searchQuery = []}, Cmd.none)
 --VIEW
 
 view : Model -> Html Msg
@@ -81,13 +113,15 @@ filterForm model =
           placeholder "Add Tag",
           name "tag",
           autofocus True,
-          onInput UpdateTagInput
+          onInput (UpdateTagInput)
         ]
         [],
-      button [ class "add", onClick UpdateSearchQuery ] [ text "Add" ],
+      button [ class "add", onClick (UpdateSearchQuery model.tagInput) ] [ text "Add" ],
       h2
         []
-        [ text (model.phraseInput ++ " " ++ model.pointsInput) ]
+        [ text ("Current Query: " ++ toString model.searchQuery) ],
+      button [ class "add", onClick (ClearSearchQuery) ] [ text "Clear" ],
+      button [ class "add", onClick (SearchMessages) ] [ text "Search" ]
     ]
 
 itemFirstLine : Message -> Html Msg
@@ -97,11 +131,11 @@ itemFirstLine message =
         if message.status == True
         then span [ class "active" ] [ text "Delivered" ]
         else span [ class "inactive" ] [ text "Pending" ],
-        span [class "select"] [text (toString message.delivered_at)]
+        span [class "numberfield"] [text (toString message.deliveredAt)]
   ]
 messageItem : Message -> Html Msg
 messageItem message = 
-  li [] [itemFirstLine message]
+  li [ class "normal"] [itemFirstLine message]
 
 messageList : List Message -> Html Msg
 messageList messages =
@@ -122,3 +156,10 @@ main =
 
 
 --PORTS/SUBSCRIPTIONS
+
+port searchRequests: List String -> Cmd msg
+port searchUpdates: (DBMessageList -> msg) -> Sub msg
+
+subscriptions: Model -> Sub Msg
+subscriptions model =
+  searchUpdates DisplayMessages

@@ -3,8 +3,8 @@ defmodule PanelDemon.Message do
 
   schema "messages" do
     field :status, :boolean, default: false
-    field :delivered_at, Ecto.DateTime
-    field :tags, :map
+    field :delivered_at, Ecto.DateTime, default: Ecto.DateTime.utc
+    field :tags, {:array, :string}
 
     timestamps
   end
@@ -21,5 +21,14 @@ defmodule PanelDemon.Message do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
+  end
+end
+
+defimpl Poison.Encoder, for: PanelDemon.Message do
+  def encode(model, opts) do
+    %{id: model.id,
+      status: model.status,
+      deliveredAt: model.delivered_at,
+      tags: model.tags} |> Poison.Encoder.encode(opts)
   end
 end

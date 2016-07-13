@@ -5,6 +5,8 @@ defmodule PanelDemon.UserSocket do
   # channel "rooms:*", PanelDemon.RoomChannel
   channel "processes:planner", PanelDemon.ProcessChannel
 
+  channel "messages:lobby", PanelDemon.MessageChannel
+
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
   # transport :longpoll, Phoenix.Transports.LongPoll

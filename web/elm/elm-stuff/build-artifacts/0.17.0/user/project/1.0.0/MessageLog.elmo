@@ -1,3 +1,75 @@
+var _user$project$MessageLog$itemFirstLine = function (message) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('firstline')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$span,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('process')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(message.id))
+					])),
+				_elm_lang$core$Native_Utils.eq(message.status, true) ? A2(
+				_elm_lang$html$Html$span,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('active')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Delivered')
+					])) : A2(
+				_elm_lang$html$Html$span,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('inactive')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Pending')
+					])),
+				A2(
+				_elm_lang$html$Html$span,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('numberfield')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(message.deliveredAt))
+					]))
+			]));
+};
+var _user$project$MessageLog$messageItem = function (message) {
+	return A2(
+		_elm_lang$html$Html$li,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('normal')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$MessageLog$itemFirstLine(message)
+			]));
+};
+var _user$project$MessageLog$messageList = function (messages) {
+	var messageItems = A2(_elm_lang$core$List$map, _user$project$MessageLog$messageItem, messages);
+	return A2(
+		_elm_lang$html$Html$ul,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		messageItems);
+};
 var _user$project$MessageLog$pageHeader = function (model) {
 	return A2(
 		_elm_lang$html$Html$h1,
@@ -6,6 +78,213 @@ var _user$project$MessageLog$pageHeader = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_elm_lang$html$Html$text('Message Log')
+			]));
+};
+var _user$project$MessageLog$init = function () {
+	var initialModel = {
+		messages: _elm_lang$core$Native_List.fromArray(
+			[]),
+		searchQuery: _elm_lang$core$Native_List.fromArray(
+			[]),
+		tagInput: '',
+		filterByDate: false,
+		filterByStatus: false
+	};
+	return {ctor: '_Tuple2', _0: initialModel, _1: _elm_lang$core$Platform_Cmd$none};
+}();
+var _user$project$MessageLog$convertMessage = function (dbmessage) {
+	return {
+		id: function (_) {
+			return _.id;
+		}(dbmessage),
+		status: function (_) {
+			return _.status;
+		}(dbmessage),
+		deliveredAt: function (_) {
+			return _.deliveredAt;
+		}(dbmessage)
+	};
+};
+var _user$project$MessageLog$searchRequests = _elm_lang$core$Native_Platform.outgoingPort(
+	'searchRequests',
+	function (v) {
+		return _elm_lang$core$Native_List.toArray(v).map(
+			function (v) {
+				return v;
+			});
+	});
+var _user$project$MessageLog$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'NoOp':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'UpdateTagInput':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{tagInput: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UpdateSearchQuery':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							searchQuery: A2(_elm_lang$core$List_ops['::'], _p0._0, model.searchQuery)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SearchMessages':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$MessageLog$searchRequests(model.searchQuery)
+				};
+			case 'DisplayMessages':
+				var messagesToShow = A2(_elm_lang$core$List$map, _user$project$MessageLog$convertMessage, _p0._0);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{messages: messagesToShow}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							searchQuery: _elm_lang$core$Native_List.fromArray(
+								[])
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _user$project$MessageLog$searchUpdates = _elm_lang$core$Native_Platform.incomingPort(
+	'searchUpdates',
+	_elm_lang$core$Json_Decode$list(
+		A2(
+			_elm_lang$core$Json_Decode$andThen,
+			A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int),
+			function (id) {
+				return A2(
+					_elm_lang$core$Json_Decode$andThen,
+					A2(_elm_lang$core$Json_Decode_ops[':='], 'status', _elm_lang$core$Json_Decode$bool),
+					function (status) {
+						return A2(
+							_elm_lang$core$Json_Decode$andThen,
+							A2(_elm_lang$core$Json_Decode_ops[':='], 'deliveredAt', _elm_lang$core$Json_Decode$string),
+							function (deliveredAt) {
+								return A2(
+									_elm_lang$core$Json_Decode$andThen,
+									A2(
+										_elm_lang$core$Json_Decode_ops[':='],
+										'tags',
+										_elm_lang$core$Json_Decode$succeed(
+											{})),
+									function (tags) {
+										return _elm_lang$core$Json_Decode$succeed(
+											{id: id, status: status, deliveredAt: deliveredAt, tags: tags});
+									});
+							});
+					});
+			})));
+var _user$project$MessageLog$Model = F5(
+	function (a, b, c, d, e) {
+		return {messages: a, searchQuery: b, tagInput: c, filterByDate: d, filterByStatus: e};
+	});
+var _user$project$MessageLog$Message = F3(
+	function (a, b, c) {
+		return {id: a, status: b, deliveredAt: c};
+	});
+var _user$project$MessageLog$DBMessage = F4(
+	function (a, b, c, d) {
+		return {id: a, status: b, deliveredAt: c, tags: d};
+	});
+var _user$project$MessageLog$ClearSearchQuery = {ctor: 'ClearSearchQuery'};
+var _user$project$MessageLog$DisplayMessages = function (a) {
+	return {ctor: 'DisplayMessages', _0: a};
+};
+var _user$project$MessageLog$subscriptions = function (model) {
+	return _user$project$MessageLog$searchUpdates(_user$project$MessageLog$DisplayMessages);
+};
+var _user$project$MessageLog$SearchMessages = {ctor: 'SearchMessages'};
+var _user$project$MessageLog$UpdateSearchQuery = function (a) {
+	return {ctor: 'UpdateSearchQuery', _0: a};
+};
+var _user$project$MessageLog$UpdateTagInput = function (a) {
+	return {ctor: 'UpdateTagInput', _0: a};
+};
+var _user$project$MessageLog$filterForm = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$input,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$type$('text'),
+						_elm_lang$html$Html_Attributes$placeholder('Add Tag'),
+						_elm_lang$html$Html_Attributes$name('tag'),
+						_elm_lang$html$Html_Attributes$autofocus(true),
+						_elm_lang$html$Html_Events$onInput(_user$project$MessageLog$UpdateTagInput)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('add'),
+						_elm_lang$html$Html_Events$onClick(
+						_user$project$MessageLog$UpdateSearchQuery(model.tagInput))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Add')
+					])),
+				A2(
+				_elm_lang$html$Html$h2,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Current Query: ',
+							_elm_lang$core$Basics$toString(model.searchQuery)))
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('add'),
+						_elm_lang$html$Html_Events$onClick(_user$project$MessageLog$ClearSearchQuery)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Clear')
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('add'),
+						_elm_lang$html$Html_Events$onClick(_user$project$MessageLog$SearchMessages)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Search')
+					]))
 			]));
 };
 var _user$project$MessageLog$view = function (model) {
@@ -17,15 +296,13 @@ var _user$project$MessageLog$view = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$MessageLog$pageHeader(model)
+				_user$project$MessageLog$pageHeader(model),
+				_user$project$MessageLog$filterForm(model),
+				_user$project$MessageLog$messageList(model.messages)
 			]));
 };
-var _user$project$MessageLog$Model = F4(
-	function (a, b, c, d) {
-		return {messages: a, searchQuery: b, filterByDate: c, filterByStatus: d};
-	});
-var _user$project$MessageLog$Message = F3(
-	function (a, b, c) {
-		return {id: a, status: b, deliveredAt: c};
-	});
+var _user$project$MessageLog$main = {
+	main: _elm_lang$html$Html_App$program(
+		{init: _user$project$MessageLog$init, view: _user$project$MessageLog$view, update: _user$project$MessageLog$update, subscriptions: _user$project$MessageLog$subscriptions})
+};
 var _user$project$MessageLog$NoOp = {ctor: 'NoOp'};

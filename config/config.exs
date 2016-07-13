@@ -19,6 +19,8 @@ config :panel_demon, PanelDemon.Endpoint,
   pubsub: [name: PanelDemon.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :panel_demon, :ecto_repos, [PanelDemon.Repo]
+
 
 
 # Configures Elixir's Logger

@@ -282,7 +282,7 @@ pageFooter =
 itemFirstLine : Process -> Html Msg
 itemFirstLine process =
   div [ class "firstline" ] [
-          span [ class "process" ] [ text (process.name ++ (toString process.id)) ],
+          span [ class "process" ] [ text (process.name) ],
           if process.isActive == True
           then span [ class "active" ] [ text "Active" ]
           else span [ class "inactive" ] [ text "Inactive" ],
